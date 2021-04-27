@@ -2,12 +2,44 @@ import React, { useState, useEffect }from 'react';
 import './App.css'
 import Post from './Post'
 import { db } from './firebase'
+import { makeStyles } from '@material-ui/core/styles';
+import Modal from '@material-ui/core/Modal';
+import { Button, Input } from '@material-ui/core';
 
 // Styling through Material UI
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
 
+  return {
+    top: `${top}%`,
+    bottom: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+};
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    postition: 'absolute',
+    width: 400,
+    background_color: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3)
+  },
+}));
+
+// Hooks
 function App() {
+  const classes = useStyles();
+  const [modalStyle] = useState(getModalStyle);
+
+
   const [posts, setPosts] = useState([]);
   const [open, setOpen] = useState(false);
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   // useEffect  -> Runs a piece of code based on a specific condition
   // if [] blank will run once with the page loads and not NEVER again: ONE AND DONE
@@ -22,29 +54,56 @@ function App() {
       })));
     })
   }, [])
-  
-  
+
+  const signUp = (event) => {
+
+  }
 
   return (
-    <div className="App">
+    <div className="app">
       <Modal
         open={open}
         onClose={() => setOpen(false)}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        >
+      >
         <div style={modalStyle} className={classes.paper}>
-        <h2>I am a modal</h2>
-       </div>
+          <center>
+            <img
+              className="app__headerImage"
+              src="https://1000logos.net/wp-content/uploads/2017/02/Instagram-Logo.png"
+              alt=""
+            />
+
+            <Input
+              placeholder="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+    
+            <Input
+              placeholder="email"
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <Input
+              placeholder="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            
+            <Button onClick={signUp}>Sign Up</Button>
+          </center>
+        </div>
       </Modal>
       
       <div className="app__header">
-        <img
-          className="app__headerImage"
-          src="https://1000logos.net/wp-content/uploads/2017/02/Instagram-Logo.png"
-          alt=""
-        />
+        
       </div>
+      
+      <Button onClick={() => setOpen(true)}></Button>
 
       <h1>Hello, World!</h1>
 
