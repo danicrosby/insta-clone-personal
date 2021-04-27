@@ -1,5 +1,19 @@
-.App {
+.app {
   margin: 10;
+}
+
+.app__header {
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  padding: 20px;
+  border-bottom: 1px sold lightgrey;
+  object-fit: contain;
+}
+
+.app__headerImage {
+  object-fit: contain;
+  width: 8em;
 }
 
 .app__signup {

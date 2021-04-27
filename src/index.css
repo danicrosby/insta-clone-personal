@@ -1,13 +1,1 @@
-.app {
-  background-color: #fafafa;
-}
 
-.app__header {
-  margin-bottom: 1px solid lightgrey;
-}
-
-.app__headerImage {
-  background-color: white;
-  width: 5em;
-  object-fit: contain;
-}

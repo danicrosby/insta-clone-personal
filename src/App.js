@@ -2,41 +2,18 @@ import React, { useState, useEffect }from 'react';
 import './App.css'
 import Post from './Post'
 import { auth, db } from './firebase'
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles, getModalStyle } from './ModalStyles'
 import Modal from '@material-ui/core/Modal';
 import { Button, Input } from '@material-ui/core';
-
-// Styling through Material UI
-function getModalStyle() {
-  const top = 50;
-  const left = 50;
-
-  return {
-    top: `${top}%`,
-    bottom: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-};
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    postition: 'absolute',
-    width: 400,
-    background_color: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3)
-  },
-}));
+import ImageUpload from './ImageUpload';
 
 // Hooks
 function App() {
   const classes = useStyles();
   const [modalStyle] = useState(getModalStyle);
-
-
   const [posts, setPosts] = useState([]);
   const [open, setOpen] = useState(false);
+  const [openSignIn, setOpenSignIn] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -53,15 +30,6 @@ function App() {
         // logged in
         console.log(authUser);
         setUser(authUser);
-
-        if (authUser.updateProfile) {
-
-        } else {
-          return authUser.updateProfile({
-            displayName: username,
-          });
-        }
-
       } else {
         // logged out
         setUser(null);
@@ -76,7 +44,8 @@ function App() {
 
 
   useEffect(() => {
-    db.collection('posts').onSnapshot(snapshot => {
+    // most recent photo is going to show at the top with ORDER BY timestamp, decending
+    db.collection('posts').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
       // code fires here and will update code
       setPosts(snapshot.docs.map(doc => ({
         id: doc.id,
@@ -90,11 +59,29 @@ function App() {
 
     auth
     .createUserWithEmailAndPassword(email, password)
+    .then((authUser) => {
+      return authUser.user.updateProfile({
+        displayName: username
+      })
+    })
     .catch((error) => alert(error.message))
   }
 
+  const signIn = (event) => {
+    event.preventDefault();
+
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .catch((error) => alert(error.message))
+    
+    setOpenSignIn(false);
+  }
+
+  // Need to fix modal placement: possibly in the material styling on line 10
   return (
+
     <div className="app">
+
       <Modal
         open={open}
         onClose={() => setOpen(false)}
@@ -107,7 +94,6 @@ function App() {
               src="https://1000logos.net/wp-content/uploads/2017/02/Instagram-Logo.png"
               alt=""
             />
-            </center>
 
             <Input
               placeholder="username"
@@ -131,22 +117,59 @@ function App() {
             />
             
             <Button onClick={signUp}>Sign Up</Button>
+            </center>
+          </form>
+        </div>
+      </Modal>
+
+
+      <Modal
+        open={openSignIn}
+        onClose={() => setOpenSignIn(false)}
+      >
+        <div style={modalStyle} className={classes.paper}>
+          <form className="app-signUp">
+
+            <img
+              className="app__headerImage"
+              src="https://1000logos.net/wp-content/uploads/2017/02/Instagram-Logo.png"
+              alt=""
+            />
+            <Input
+              placeholder="email"
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <Input
+              placeholder="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            
+            <Button onClick={signUp}>Sign Up</Button>
           </form>
         </div>
       </Modal>
       
       <div className="app__header">
-      <center>
         <img
           className="app__headerImage"
           src="https://1000logos.net/wp-content/uploads/2017/02/Instagram-Logo.png"
           alt=""
         />
-        </center>
+        {user ? (
+        <Button onClick={() => auth.signOut()}>Logout</Button>
+      ): (
+        <div className="app__loginContainer">
+          <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+          <Button onClick={() => setOpen(true)}>Sign Up</Button>
+        </div>
+      )}
       </div>
       
-      <Button onClick={() => setOpen(true)}></Button>
-
       <h1>Hello, World!</h1>
 
       {
@@ -154,6 +177,12 @@ function App() {
           <Post key={id} username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
         ))
       }
+
+      {user?.displayName ? (
+        <ImageUpload username={user.displayName}/>
+      ): (
+        <h3> Sorry, you need to login to upload</h3>
+      )}
 
       <Post username="danilion.1111" caption="Hello Puppy!" imageUrl="https://images.unsplash.com/photo-1524511751214-b0a384dd9afe?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjB8fGRvZ3xlbnwwfDB8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"/>
       <Post username="jon.crosby" caption="Cute Little Puppy!" imageUrl="https://images.unsplash.com/photo-1514984879728-be0aff75a6e8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjR8fGRvZ3xlbnwwfDB8MHx8&auto=format&fit=crop&w=800&q=60"/>
