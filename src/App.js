@@ -6,7 +6,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button, Input } from '@material-ui/core';
 import ImageUpload from './ImageUpload';
-import InstagramEmbed from 'react-instagram-embed';
 
 function getModalStyle() {
   const top = 50;
@@ -197,7 +196,6 @@ function App() {
 
       <div className="app__posts">
 
-        <div className="app__postsLeft">
           {
             posts.map(({id, post}) => (
               <Post 
@@ -209,30 +207,13 @@ function App() {
               imageUrl={post.imageUrl} />
             ))
           }
-        </div>
 
-        <div className="app__postsRight">
-          
-          <InstagramEmbed
-            url='https://instagr.am/p/Zw9o4/'
-            clientAccessToken='123|456'
-            maxWidth={320}
-            hideCaption={false}
-            containerTagName='div'
-            protocol=''
-            injectScript
-            onLoading={() => {}}
-            onSuccess={() => {}}
-            onAfterRender={() => {}}
-            onFailure={() => {}}
-          />
-        </div>
-
-      {user?.displayName ? (
+          {/* file uploader */}
+      {/* {user?.displayName ? (
         <ImageUpload username={user.displayName}/>
       ): (
         <h3> Sorry, you need to login to upload</h3>
-      )}
+      )} */}
 
 
       <Post username="danilion.1111" caption="Hello Puppy!" imageUrl="https://images.unsplash.com/photo-1524511751214-b0a384dd9afe?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjB8fGRvZ3xlbnwwfDB8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"/>
