@@ -1,7 +1,7 @@
 import React, { useState, useEffect }from 'react';
 import './App.css'
 import Post from './Post'
-import { db } from './firebase'
+import { auth, db } from './firebase'
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button, Input } from '@material-ui/core';
@@ -40,11 +40,41 @@ function App() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [user, setUser] = useState(null);
 
   // useEffect  -> Runs a piece of code based on a specific condition
   // if [] blank will run once with the page loads and not NEVER again: ONE AND DONE
   // if [posts] will run this effect every single time posts change
   // snapshot is a powerful listener that will take a snapshot of every new change on firebase collection
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        // logged in
+        console.log(authUser);
+        setUser(authUser);
+
+        if (authUser.updateProfile) {
+
+        } else {
+          return authUser.updateProfile({
+            displayName: username,
+          });
+        }
+
+      } else {
+        // logged out
+        setUser(null);
+      }
+    })
+
+    return () => {
+      //preform some clean up action (unsubscribe listener)
+      unsubscribe();
+    }
+  }, [user, username]);
+
+
   useEffect(() => {
     db.collection('posts').onSnapshot(snapshot => {
       // code fires here and will update code
@@ -56,7 +86,11 @@ function App() {
   }, [])
 
   const signUp = (event) => {
+    event.preventDefault();
 
+    auth
+    .createUserWithEmailAndPassword(email, password)
+    .catch((error) => alert(error.message))
   }
 
   return (
@@ -66,12 +100,14 @@ function App() {
         onClose={() => setOpen(false)}
       >
         <div style={modalStyle} className={classes.paper}>
-          <center>
+          <form className="app-signUp">
+            <center>
             <img
               className="app__headerImage"
               src="https://1000logos.net/wp-content/uploads/2017/02/Instagram-Logo.png"
               alt=""
             />
+            </center>
 
             <Input
               placeholder="username"
@@ -95,12 +131,18 @@ function App() {
             />
             
             <Button onClick={signUp}>Sign Up</Button>
-          </center>
+          </form>
         </div>
       </Modal>
       
       <div className="app__header">
-        
+      <center>
+        <img
+          className="app__headerImage"
+          src="https://1000logos.net/wp-content/uploads/2017/02/Instagram-Logo.png"
+          alt=""
+        />
+        </center>
       </div>
       
       <Button onClick={() => setOpen(true)}></Button>

@@ -2,3 +2,7 @@
   margin: 10;
 }
 
+.app__signup {
+  display: flex;
+  flex-direction: column;
+}
