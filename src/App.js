@@ -3,19 +3,11 @@ import './App.css'
 import Post from './Post'
 import { db } from './firebase'
 
+// Styling through Material UI
+
 function App() {
-  const [posts, setPosts] = useState([
-    {
-      username: "danilion.1111",
-      caption: "Hello Puppy!",
-      imageUrl: "https://images.unsplash.com/photo-1524511751214-b0a384dd9afe?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjB8fGRvZ3xlbnwwfDB8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"
-    },
-    {
-      username: "jon.crosby",
-      caption: "Cute Little Puppy!",
-      imageUrl: "https://images.unsplash.com/photo-1514984879728-be0aff75a6e8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjR8fGRvZ3xlbnwwfDB8MHx8&auto=format&fit=crop&w=800&q=60"
-    },
-  ]);
+  const [posts, setPosts] = useState([]);
+  const [open, setOpen] = useState(false);
 
   // useEffect  -> Runs a piece of code based on a specific condition
   // if [] blank will run once with the page loads and not NEVER again: ONE AND DONE
@@ -35,6 +27,17 @@ function App() {
 
   return (
     <div className="App">
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        >
+        <div style={modalStyle} className={classes.paper}>
+        <h2>I am a modal</h2>
+       </div>
+      </Modal>
+      
       <div className="app__header">
         <img
           className="app__headerImage"
