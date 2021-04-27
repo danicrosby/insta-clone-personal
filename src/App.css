@@ -4,8 +4,9 @@
 
 .app__posts {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  padding: 20px;
+  padding: 5px;
 }
 
 .app__postsRight {
@@ -27,7 +28,7 @@
 
 .app__headerImage {
   object-fit: contain;
-  width: 8em;
+  width: 5em;
 }
 
 .app__signup {

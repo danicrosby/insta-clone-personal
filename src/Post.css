@@ -2,24 +2,24 @@
   background-color: fafafa;
   max-width: 500px;
   border: 1px solid lightgrey;
-  margin-bottom: 45px;
+  margin-bottom: 10px;
 }
 
 .post__image {
   width: 100%;
   object-fit: contain;
-  border-top: 1px solid lightgrey;
-  border-bottom: 1px solid lightgrey;
 }
 
 .post__text {
   font-weight: normal;
-  padding: 20px;
+  padding: 10px;
 }
 
 .post__header {
+  display: flex;
   border: 1px solid lightgrey;
   padding: 20px;
+  
 }
 
 .post__avatar {

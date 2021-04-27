@@ -1,12 +1,34 @@
 import React, { useState, useEffect }from 'react';
-import './App.css'
-import Post from './Post'
-import { auth, db } from './firebase'
-import { useStyles, getModalStyle } from './ModalStyles'
+import './App.css';
+import Post from './Post';
+import { auth, db } from './firebase';
+import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button, Input } from '@material-ui/core';
 import ImageUpload from './ImageUpload';
 import InstagramEmbed from 'react-instagram-embed';
+
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
+
+  return {
+    top: `${top}%`,
+    bottom: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+};
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    postition: 'absolute',
+    width: 400,
+    background_color: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3)
+  },
+}));
 
 // Hooks
 function App() {
@@ -190,6 +212,7 @@ function App() {
         </div>
 
         <div className="app__postsRight">
+          
           <InstagramEmbed
             url='https://instagr.am/p/Zw9o4/'
             clientAccessToken='123|456'
