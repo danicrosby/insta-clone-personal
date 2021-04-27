@@ -6,6 +6,7 @@ import { useStyles, getModalStyle } from './ModalStyles'
 import Modal from '@material-ui/core/Modal';
 import { Button, Input } from '@material-ui/core';
 import ImageUpload from './ImageUpload';
+import InstagramEmbed from 'react-instagram-embed';
 
 // Hooks
 function App() {
@@ -155,11 +156,13 @@ function App() {
       </Modal>
       
       <div className="app__header">
+
         <img
           className="app__headerImage"
           src="https://1000logos.net/wp-content/uploads/2017/02/Instagram-Logo.png"
           alt=""
         />
+
         {user ? (
         <Button onClick={() => auth.signOut()}>Logout</Button>
       ): (
@@ -169,14 +172,38 @@ function App() {
         </div>
       )}
       </div>
-      
-      <h1>Hello, World!</h1>
 
-      {
-        posts.map(({id, post}) => (
-          <Post key={id} username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
-        ))
-      }
+      <div className="app__posts">
+
+        <div className="app__postsLeft">
+          {
+            posts.map(({id, post}) => (
+              <Post 
+              key={id} 
+              postId={id} 
+              user={user} 
+              username={post.username} 
+              caption={post.caption} 
+              imageUrl={post.imageUrl} />
+            ))
+          }
+        </div>
+
+        <div className="app__postsRight">
+          <InstagramEmbed
+            url='https://instagr.am/p/Zw9o4/'
+            clientAccessToken='123|456'
+            maxWidth={320}
+            hideCaption={false}
+            containerTagName='div'
+            protocol=''
+            injectScript
+            onLoading={() => {}}
+            onSuccess={() => {}}
+            onAfterRender={() => {}}
+            onFailure={() => {}}
+          />
+        </div>
 
       {user?.displayName ? (
         <ImageUpload username={user.displayName}/>
@@ -184,12 +211,13 @@ function App() {
         <h3> Sorry, you need to login to upload</h3>
       )}
 
+
       <Post username="danilion.1111" caption="Hello Puppy!" imageUrl="https://images.unsplash.com/photo-1524511751214-b0a384dd9afe?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjB8fGRvZ3xlbnwwfDB8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"/>
       <Post username="jon.crosby" caption="Cute Little Puppy!" imageUrl="https://images.unsplash.com/photo-1514984879728-be0aff75a6e8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjR8fGRvZ3xlbnwwfDB8MHx8&auto=format&fit=crop&w=800&q=60"/>
       <Post username="llxxkkyyBoi" caption="Old Friend!" imageUrl="https://images.unsplash.com/photo-1455103493930-a116f655b6c5?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzJ8fGRvZ3xlbnwwfDB8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"/>
       <Post username="egan.ashenfelter" caption="Boop!" imageUrl="https://images.unsplash.com/photo-1601758123927-4f7acc7da589?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzF8fGRvZ3xlbnwwfDB8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"/>
-      
-    </div>
+      </div>
+  </div>
   );
 }
 

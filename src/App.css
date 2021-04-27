@@ -2,9 +2,23 @@
   margin: 10;
 }
 
+.app__posts {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.app__postsRight {
+  margin-left: 20px;
+}
+
 .app__header {
   display: flex;
   justify-content: space-between;
+  position: sticky;
+  position: 0;
+  /* z-index prevents overlapping when scrolling */
+  z-index: 1; 
   background-color: white;
   padding: 20px;
   border-bottom: 1px sold lightgrey;
